@@ -14,7 +14,14 @@ function init() {
     camera.position.z = 1000;
 
     geometry = new THREE.SphereGeometry( 500, 16, 16 );
-    material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+
+    material = new THREE.ShaderMaterial( {
+        uniforms: {
+            'lightPos':	{ type: 'v3', value: new THREE.Vector3(1000, 1000, -1000) }
+            },
+        vertexShader: document.getElementById('vertex-shader').textContent,
+        fragmentShader: document.getElementById('fragment-shader').textContent
+    } );
 
     mesh = new THREE.Mesh( geometry, material );
     scene.add( mesh );
