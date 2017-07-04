@@ -27,13 +27,16 @@
 <script src="js/vendor/three.min.js"></script>
 <script type="text/x-glsl" id="vertex-shader">
 
+uniform vec3 lightPosition;
 varying vec4 color;
 
 void main(){
     gl_Position = projectionMatrix *
                   modelViewMatrix *
                   vec4(position,1.0);
-    color = vec4(position/500.0, 1.0);
+
+    float dotProduct = max(0.0, dot(normalize(position), normalize(lightPosition)));
+    color = vec4(dotProduct, dotProduct, dotProduct, 1.0);
 }
 
 </script>

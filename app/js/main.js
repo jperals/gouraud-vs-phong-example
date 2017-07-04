@@ -17,7 +17,7 @@ function init() {
 
     material = new THREE.ShaderMaterial( {
         uniforms: {
-            'lightPos':	{ type: 'v3', value: new THREE.Vector3(1000, 1000, -1000) }
+            'lightPosition':	{ type: 'v3', value: new THREE.Vector3(1000, 1000, 1000) }
             },
         vertexShader: document.getElementById('vertex-shader').textContent,
         fragmentShader: document.getElementById('fragment-shader').textContent
