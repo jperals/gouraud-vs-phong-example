@@ -13,7 +13,7 @@ function init() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     camera.position.z = 1000;
 
-    geometry = new THREE.SphereGeometry( 500, 16, 16 );
+    geometry = new THREE.SphereGeometry( 500, 8, 8 );
 
     material = new THREE.ShaderMaterial( {
         uniforms: {
