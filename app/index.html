@@ -31,12 +31,11 @@ uniform vec3 lightPosition;
 varying vec4 color;
 
 void main(){
-    gl_Position = projectionMatrix *
-                  modelViewMatrix *
-                  vec4(position,1.0);
-
-    float dotProduct = max(0.0, dot(normalize(position), normalize(lightPosition)));
-    color = vec4(dotProduct, dotProduct, dotProduct, 1.0);
+    vec4 vertexPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * vertexPosition;
+    float dotProduct = max(0.0, dot(normalize(vec3(vertexPosition)), normalize(lightPosition)));
+    float intensity = pow(dotProduct, 10.0);
+    color = vec4(intensity, intensity, intensity, 1.0);
 }
 
 </script>
