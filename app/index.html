@@ -25,21 +25,23 @@
 </body>
 
 <script src="js/vendor/three.min.js"></script>
-<script type="text/x-glsl" id="vertex-shader">
+<script type="text/x-glsl" id="gouraud-vertex-shader">
 
 uniform vec3 lightPosition;
+uniform vec3 offset;
 varying vec4 color;
 
 void main(){
     vec4 vertexPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_Position = projectionMatrix * vertexPosition;
+    gl_Position = projectionMatrix * vertexPosition - vec4(offset, 0.4);
+
     float dotProduct = max(0.0, dot(normalize(vec3(vertexPosition)), normalize(lightPosition)));
     float intensity = pow(dotProduct, 10.0);
     color = vec4(intensity, intensity, intensity, 1.0);
 }
 
 </script>
-<script type="text/x-glsl" id="fragment-shader">
+<script type="text/x-glsl" id="gouraud-fragment-shader">
 
 precision mediump float;
 
@@ -47,6 +49,33 @@ varying vec4 color;
 
 void main() {
     gl_FragColor = color;
+}
+
+</script>
+<script type="text/x-glsl" id="phong-vertex-shader">
+
+uniform vec3 offset;
+varying vec3 interpolatedPosition;
+
+void main(){
+    vec4 vertexPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * vertexPosition + vec4(offset, 0.0);
+
+    interpolatedPosition = vec3(vertexPosition);
+}
+
+</script>
+<script type="text/x-glsl" id="phong-fragment-shader">
+
+precision mediump float;
+
+uniform vec3 lightPosition;
+varying vec3 interpolatedPosition;
+
+void main() {
+    float dotProduct = max(0.0, dot(normalize(interpolatedPosition), normalize(lightPosition)));
+    float intensity = pow(dotProduct, 10.0);
+    gl_FragColor = vec4(intensity, intensity, intensity, 1.0);
 }
 
 </script>

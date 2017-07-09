@@ -1,7 +1,8 @@
 (function() {
 
 var scene, camera, renderer;
-var geometry, material, mesh;
+var geometry;
+var gouraudSphere, phongSphere;
 var lightPosition;
 
 init();
@@ -18,16 +19,31 @@ function init() {
 
     lightPosition = { type: 'v3', value: new THREE.Vector3(0, 0, - 1) };
 
-    material = new THREE.ShaderMaterial( {
+    var gouraudMaterial = new THREE.ShaderMaterial({
         uniforms: {
-            lightPosition: lightPosition
-            },
-        vertexShader: document.getElementById('vertex-shader').textContent,
-        fragmentShader: document.getElementById('fragment-shader').textContent
-    } );
+            lightPosition: lightPosition,
+            offset: { type: 'v3', value: new THREE.Vector3(250, 0, 0) }
+        },
+        vertexShader: document.getElementById('gouraud-vertex-shader').textContent,
+        fragmentShader: document.getElementById('gouraud-fragment-shader').textContent
+    });
 
-    mesh = new THREE.Mesh( geometry, material );
-    scene.add( mesh );
+    gouraudSphere = new THREE.Mesh( geometry, gouraudMaterial );
+
+    scene.add( gouraudSphere );
+
+    var phongMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+            lightPosition: lightPosition,
+            offset: { type: 'v3', value: new THREE.Vector3(250, 0, 0) }
+        },
+        vertexShader: document.getElementById('phong-vertex-shader').textContent,
+        fragmentShader: document.getElementById('phong-fragment-shader').textContent
+    });
+
+    phongSphere = new THREE.Mesh( geometry, phongMaterial );
+
+    scene.add( phongSphere );
 
     renderer = new THREE.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -47,8 +63,11 @@ function animate() {
 
     requestAnimationFrame( animate );
 
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
+    gouraudSphere.rotation.x += 0.003;
+    gouraudSphere.rotation.y += 0.003;
+
+    phongSphere.rotation.x += 0.003;
+    phongSphere.rotation.y += 0.003;
 
     renderer.render( scene, camera );
 
